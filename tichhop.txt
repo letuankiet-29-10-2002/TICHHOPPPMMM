@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl"
+>
+    <xsl:output method="html" indent="yes"/>
+
+    <xsl:template match="DS">
+		<html>
+			<head>
+				<title>Ví dụ</title>
+				<link rel="stylesheet" tyoe="text/css" href="Style.css"/>
+			</head>
+			<body>
+				<h1 align="center" class="tieude">BẢNG LƯƠNG THÁNG</h1>
+				<xsl:for-each select="CongTy">
+					<h2>
+						Tên công ty:<xsl:value-of  select="@tenCT"/>
+					</h2>
+					<xsl:for-each select="donvi">
+					<h2>
+						Tên phòng:<xsl:value-of select="tendv"/>
+					</h2>
+					<table border="2" width="100%" cellspacing="0">
+						<tr>
+							<th>STT</th>
+							<th>Họ tên</th>
+							<th>Ngày sinh</th>
+							<th>Ngày công</th>
+							<th>Lương</th>
+						</tr>
+						<xsl:for-each select ="nhanvien">
+							<tr>
+								<td class="chuoi">
+									<xsl:value-of select="position()"/>
+								</td>
+								<td class="chuoi">
+									<xsl:value-of select="hoten"/>
+								</td>
+								<td class="chuoi">
+									<xsl:value-of select="ngaysinh"/>
+								</td>
+								<td class="so">
+									<xsl:value-of select="ngaycong"/>
+								</td>
+								<td>
+									<xsl:variable name ="nc" select="ngaycong"/>
+									<xsl:if test="20>=$nc">
+										<xsl:variable name="tien" select="$nc*150000"/>
+										<xsl:value-of select="$tien"/>
+									</xsl:if>
+									<xsl:if test="$nc > 20 and $nc &lt;=25">
+										<xsl:variable name="tien" select="20*150000 + ($nc - 20)*200000"/>
+										<xsl:value-of select="$tien"/>
+									</xsl:if>
+									<xsl:if test="$nc > 25">
+										<xsl:variable name="tien" select="4000000 + ($nc - 25)*250000"/>
+										<xsl:value-of select="$tien"/>
+									</xsl:if>
+								</td>
+							</tr>
+						</xsl:for-each>
+					</table>
+					</xsl:for-each>
+				</xsl:for-each>
+			</body>
+		</html>
+    </xsl:template>
+</xsl:stylesheet>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="CongTy.xslt"?>
+<DS>
+	<CongTy tenCT="Công ty dược hà nam">
+		<donvi>
+			<tendv>Nhân sự</tendv>
+			<nhanvien>
+				<hoten>Lê Tuấn Kiệt</hoten>
+				<ngaysinh>2002-10-29</ngaysinh>
+				<ngaycong>25</ngaycong>
+			</nhanvien>
+			<nhanvien>
+				<hoten>Lê Tuấn Kiệt</hoten>
+				<ngaysinh>2002-10-29</ngaysinh>
+				<ngaycong>25</ngaycong>
+			</nhanvien>
+			<nhanvien>
+				<hoten>Lê Tuấn Kiệt</hoten>
+				<ngaysinh>2002-10-29</ngaysinh>
+				<ngaycong>25</ngaycong>
+			</nhanvien>
+		</donvi>
+	</CongTy>
+</DS>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body
+{
+}
+table{
+    background-color:yellow;
+}
+.tieude{
+    text-align:center;
+    color:lightpink;
+    background-color:antiquewhite;
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bold;
+}
+.chuoi{
+    text-align:left;
+    color:red;
+}
+.so{
+    text-align:right;
+    color:red;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="contact"
+    targetNamespace="http://tempuri.org/contact.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/contact.xsd"
+    xmlns:mstns="http://tempuri.org/contact.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+	<xs:simpleType name="mahangType">
+		<xs:restriction base="xs:ID">
+			<xs:maxLength value="6"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="dongiaType">
+		<xs:restriction base="xs:float">
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="donviType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value ="gói"/>
+			<xs:enumeration value ="hộp"/>
+			<xs:enumeration value ="chiếc"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="hangType">
+		<xs:sequence>
+			<xs:element name="TenHang" type="xs:string"/>
+			<xs:element name="SoLuong" type="xs:integer"/>
+			<xs:element name="DonViTinh" type="donviType"/>
+			<xs:element name="DonGia" type="dongiaType"/>
+		</xs:sequence>
+	<xs:attribute name="MaHang" type="mahangType" use="required"/>
+	</xs:complexType>
+
+	<xs:complexType name="loaihangType">
+		<xs:sequence>
+			<xs:element name ="MaHang" type="mahangType"/>
+		</xs:sequence>
+	<xs:attribute name ="TenLoai" type="xs:string"/>
+	<xs:attribute name ="MaLoai" type="xs:ID" use="required"/>
+	</xs:complexType>
+	
+	<xs:complexType name ="hoadonType">
+		<xs:sequence>
+			<xs:element name="MaHD" type="xs:ID" maxOccurs="2"/>
+			<xs:element name="NgayBan" type="xs:date"/>
+			<xs:element name="LoaiHang" type="loaihangType" maxOccurs="10"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="dsType">
+		<xs:sequence>
+			<xs:element name ="HoaDon" type="hoadonType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="DS" type="dsType"/>
+
+</xs:schema>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="utf-8" ?>
+<DS xmlns="http://tempuri.org/contact.xsd">
+	<HoaDon>
+		<MaHD>HD1</MaHD>
+		<NgayBan></NgayBan>
+	</HoaDon>
+</DS>
+	
+
